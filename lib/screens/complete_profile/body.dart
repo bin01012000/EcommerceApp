@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fruit_app/components/custom_suffix_icon.dart';
-import 'package:fruit_app/components/default_button.dart';
-import 'package:fruit_app/components/form_error.dart';
-import 'package:fruit_app/components/social_card.dart';
 import 'package:fruit_app/constants.dart';
-import 'package:fruit_app/screens/sign_up/components/sign_up_form.dart';
+import 'package:fruit_app/screens/complete_profile/components/complete_profile_form.dart';
 import 'package:fruit_app/size_config.dart';
 
 class Body extends StatelessWidget {
@@ -21,7 +17,7 @@ class Body extends StatelessWidget {
               height: SizeConfig.screenHeight * 0.02,
             ),
             Text(
-              'Register Account',
+              'Complete Profile',
               style: headingStyle,
             ),
             const Text(
@@ -31,27 +27,7 @@ class Body extends StatelessWidget {
             SizedBox(
               height: SizeConfig.screenHeight * 0.07,
             ),
-            const SignUpForm(),
-            SizedBox(
-              height: SizeConfig.screenHeight * 0.07,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SocialCard(
-                  icon: "assets/icons/google-icon.svg",
-                  press: () {},
-                ),
-                SocialCard(
-                  icon: "assets/icons/facebook-2.svg",
-                  press: () {},
-                ),
-                SocialCard(
-                  icon: "assets/icons/twitter.svg",
-                  press: () {},
-                )
-              ],
-            ),
+            const CompleteProfileForm(),
             SizedBox(
               height: getProportionateScreenHeight(20),
             ),

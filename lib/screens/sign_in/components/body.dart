@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fruit_app/components/custom_suffix_icon.dart';
-import 'package:fruit_app/components/default_button.dart';
-import 'package:fruit_app/components/form_error.dart';
 import 'package:fruit_app/components/no_account_text.dart';
 import 'package:fruit_app/components/social_card.dart';
-import 'package:fruit_app/constants.dart';
-import 'package:fruit_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:fruit_app/screens/sign_in/components/sign_form.dart';
 import 'package:fruit_app/size_config.dart';
 
@@ -66,7 +60,7 @@ class Body extends StatelessWidget {
                 SizedBox(
                   height: getProportionateScreenHeight(20),
                 ),
-                NoAccountText()
+                const NoAccountText(),
               ],
             ),
           ),

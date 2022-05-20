@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fruit_app/screens/sign_up/components/body.dart';
+import 'package:fruit_app/screens/complete_profile/body.dart';
 
-class SignUpScreen extends StatelessWidget {
-  static String routeName = '/sign_up';
-  const SignUpScreen({Key? key}) : super(key: key);
+class CompleteProfileScreen extends StatelessWidget {
+  static String routeName = '/complete_profile';
+  const CompleteProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class SignUpScreen extends StatelessWidget {
   AppBar buildAppBar() {
     return AppBar(
       centerTitle: true,
-      title: const Text('Sign Up'),
+      title: const Text("Sign Up"),
     );
   }
 }
