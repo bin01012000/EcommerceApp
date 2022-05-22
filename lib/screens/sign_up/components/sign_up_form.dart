@@ -4,6 +4,7 @@ import 'package:fruit_app/components/default_button.dart';
 import 'package:fruit_app/components/form_error.dart';
 import 'package:fruit_app/constants.dart';
 import 'package:fruit_app/screens/complete_profile/complete_profile_screen.dart';
+import 'package:fruit_app/screens/otp/otp_screen.dart';
 import 'package:fruit_app/size_config.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -61,8 +62,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 text: 'Continue',
                 press: () {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.pushNamed(
-                        context, CompleteProfileScreen.routeName);
+                    Navigator.popAndPushNamed(context, OTPScreen.routeName);
                   }
                 })
           ],
