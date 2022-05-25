@@ -8,6 +8,9 @@ import 'package:fruit_app/screens/complete_profile/complete_profile_screen.dart'
 import 'package:fruit_app/screens/sign_in/sign_in_screen.dart';
 import 'package:fruit_app/size_config.dart';
 
+import '../../../api/api.dart';
+import '../../../models/User.dart';
+
 class CompleteProfileForm extends StatefulWidget {
   const CompleteProfileForm({Key? key}) : super(key: key);
 
@@ -18,7 +21,7 @@ class CompleteProfileForm extends StatefulWidget {
 class _CompleteProfileFormState extends State<CompleteProfileForm> {
   final _formKey = GlobalKey<FormState>();
   String firstName = '', lastName = '', address = '';
-  int phoneNumber = 0;
+  String phoneNumber = '';
   final List<String> errors = [];
 
   void addError({required String error}) {
@@ -37,8 +40,34 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
     }
   }
 
+  void handleSignupComplete(
+      {required String p,
+      required String e,
+      required String f,
+      required String l,
+      required int ph,
+      required String a}) async {
+    User user = User();
+    await API.postUser(p, e, a, f, l, ph).then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+
+    showDialog(
+        context: context,
+        builder: (ctx) => const AlertDialog(
+              title: Text("Sign Up Success"),
+              content: Text("Successful !!"),
+            ));
+
+    Navigator.pushNamed(context, SignInScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as CompleteArguments;
     return Form(
       key: _formKey,
       child: Padding(
@@ -70,7 +99,14 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
                 text: 'Continue',
                 press: () {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.pushNamed(context, SignInScreen.routeName);
+                    _formKey.currentState!.save();
+                    handleSignupComplete(
+                        p: args.password,
+                        e: args.user,
+                        f: firstName,
+                        l: lastName,
+                        ph: int.parse(phoneNumber),
+                        a: address);
                   }
                 })
           ],
@@ -113,7 +149,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
       inputFormatters: <TextInputFormatter>[
         FilteringTextInputFormatter.digitsOnly
       ],
-      onSaved: (newValue) => phoneNumber = newValue! as int,
+      onSaved: (newValue) => phoneNumber = newValue!,
       onChanged: (value) {
         if (value.isNotEmpty && errors.contains(kPhoneNumberNullError)) {
           removeError(error: kPhoneNumberNullError);
@@ -193,4 +229,10 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
       ),
     );
   }
+}
+
+class CompleteArguments {
+  late final String user;
+  late final String password;
+  CompleteArguments(this.user, this.password);
 }

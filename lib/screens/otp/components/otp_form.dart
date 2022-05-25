@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fruit_app/components/default_button.dart';
 import 'package:fruit_app/constants.dart';
+import 'package:fruit_app/screens/complete_profile/complete_profile_screen.dart';
+import 'package:fruit_app/screens/complete_profile/components/complete_profile_form.dart';
 import 'package:fruit_app/size_config.dart';
 
 class OTPForm extends StatefulWidget {
-  const OTPForm({Key? key}) : super(key: key);
-
+  const OTPForm(
+      {Key? key, required this.code, required this.user, required this.pass})
+      : super(key: key);
+  final int code;
+  final String user, pass;
   @override
   State<OTPForm> createState() => _OTPFormState();
 }
@@ -30,6 +35,11 @@ class _OTPFormState extends State<OTPForm> {
     }
   }
 
+  final myController = TextEditingController();
+  final myController2 = TextEditingController();
+  final myController3 = TextEditingController();
+  final myController4 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -41,6 +51,7 @@ class _OTPFormState extends State<OTPForm> {
               SizedBox(
                 width: getProportionateScreenWidth(60),
                 child: TextFormField(
+                  controller: myController,
                   autofocus: true,
                   obscureText: true,
                   keyboardType: TextInputType.number,
@@ -58,6 +69,7 @@ class _OTPFormState extends State<OTPForm> {
               SizedBox(
                 width: getProportionateScreenWidth(60),
                 child: TextFormField(
+                  controller: myController2,
                   focusNode: pin2FocusNode,
                   obscureText: true,
                   keyboardType: TextInputType.number,
@@ -75,6 +87,7 @@ class _OTPFormState extends State<OTPForm> {
               SizedBox(
                 width: getProportionateScreenWidth(60),
                 child: TextFormField(
+                  controller: myController3,
                   focusNode: pin3FocusNode,
                   obscureText: true,
                   keyboardType: TextInputType.number,
@@ -92,6 +105,7 @@ class _OTPFormState extends State<OTPForm> {
               SizedBox(
                 width: getProportionateScreenWidth(60),
                 child: TextFormField(
+                  controller: myController4,
                   focusNode: pin4FocusNode,
                   obscureText: true,
                   keyboardType: TextInputType.number,
@@ -111,7 +125,25 @@ class _OTPFormState extends State<OTPForm> {
           SizedBox(
             height: SizeConfig.screenHeight * .15,
           ),
-          DefaultButton(text: "Continue", press: () {}),
+          DefaultButton(
+              text: "Continue",
+              press: () {
+                if (widget.code.toString() ==
+                    myController.text +
+                        myController2.text +
+                        myController3.text +
+                        myController4.text) {
+                  Navigator.pushNamed(context, CompleteProfileScreen.routeName,
+                      arguments: CompleteArguments(widget.user, widget.pass));
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (ctx) => const AlertDialog(
+                            title: Text("Sign up failed"),
+                            content: Text("Code is incorrect"),
+                          ));
+                }
+              }),
         ],
       ),
     );

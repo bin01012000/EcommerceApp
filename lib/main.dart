@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:fruit_app/constants.dart';
 import 'package:fruit_app/routes.dart';
 import 'package:fruit_app/screens/splash/splash_screen.dart';
 import 'package:fruit_app/theme.dart';

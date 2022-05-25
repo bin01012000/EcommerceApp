@@ -1,11 +1,18 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fruit_app/components/custom_suffix_icon.dart';
 import 'package:fruit_app/components/default_button.dart';
 import 'package:fruit_app/components/form_error.dart';
 import 'package:fruit_app/constants.dart';
-import 'package:fruit_app/screens/complete_profile/complete_profile_screen.dart';
 import 'package:fruit_app/screens/otp/otp_screen.dart';
 import 'package:fruit_app/size_config.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
+
+import '../../../api/api.dart';
+import '../../../models/User.dart';
+import '../../otp/components/body.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
@@ -16,7 +23,7 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  String email = '', password = '', confirmPassword = '';
+  late String email = '', password = '', confirmPassword = '';
   final List<String> errors = [];
 
   void addError({required String error}) {
@@ -32,6 +39,49 @@ class _SignUpFormState extends State<SignUpForm> {
       setState(() {
         errors.remove(error);
       });
+    }
+  }
+
+  void handleSignup({required String u, required String p}) async {
+    List<User> user = [];
+    await API.getExistUser(u).then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+
+    if (user.isEmpty) {
+      int randomF(min, max) {
+        return min + Random().nextInt(max - min);
+      }
+
+      int code = randomF(1000, 9999);
+      final smtpServer = gmail('ngduonganhhuy@gmail.com', 'wtldhdnecjayispa');
+      final message = Message()
+        ..from = const Address('ngduonganhhuy@gmail.com', 'Dier Store')
+        ..recipients.add(u)
+        ..subject = 'Verify Your Email'
+        ..text = 'This is your code: $code';
+
+      try {
+        final sendReport = await send(message, smtpServer);
+        print('Message sent: $sendReport');
+      } on MailerException catch (e) {
+        print('Message not sent.');
+        for (var p in e.problems) {
+          print('Problem: ${p.code}: ${p.msg}');
+        }
+      }
+
+      Navigator.pushNamed(context, OTPScreen.routeName,
+          arguments: OTPArguments(code, u, p));
+    } else {
+      showDialog(
+          context: context,
+          builder: (ctx) => const AlertDialog(
+                title: Text("Existed"),
+                content: Text("Email already exist"),
+              ));
     }
   }
 
@@ -62,7 +112,8 @@ class _SignUpFormState extends State<SignUpForm> {
                 text: 'Continue',
                 press: () {
                   if (_formKey.currentState!.validate()) {
-                    Navigator.popAndPushNamed(context, OTPScreen.routeName);
+                    _formKey.currentState!.save();
+                    handleSignup(u: email, p: password);
                   }
                 })
           ],
@@ -83,7 +134,7 @@ class _SignUpFormState extends State<SignUpForm> {
         return;
       },
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(kPassNullError)) {
+        if (value!.isEmpty) {
           return "";
         } else if (password != confirmPassword) {
           addError(error: kMatchPassError);
@@ -116,10 +167,10 @@ class _SignUpFormState extends State<SignUpForm> {
         return;
       },
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(kPassNullError)) {
+        if (value!.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if (value.length < 8 && !errors.contains(kShortPassError)) {
+        } else if (value.length < 8) {
           addError(error: kShortPassError);
           return "";
         }
@@ -150,11 +201,10 @@ class _SignUpFormState extends State<SignUpForm> {
         return;
       },
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(kEmailNullError)) {
+        if (value!.isEmpty) {
           addError(error: kEmailNullError);
           return "";
-        } else if (!emailValidatorRegExp.hasMatch(value) &&
-            !errors.contains(kInvalidEmailError)) {
+        } else if (!emailValidatorRegExp.hasMatch(value)) {
           addError(error: kInvalidEmailError);
           return "";
         }

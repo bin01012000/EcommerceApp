@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fruit_app/api/api.dart';
 import 'package:fruit_app/components/custom_suffix_icon.dart';
 import 'package:fruit_app/components/default_button.dart';
 import 'package:fruit_app/components/form_error.dart';
 import 'package:fruit_app/constants.dart';
+import 'package:fruit_app/models/User.dart';
 import 'package:fruit_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:fruit_app/screens/login_success/login_success_screen.dart';
 import 'package:fruit_app/size_config.dart';
@@ -33,6 +35,35 @@ class _SignFormState extends State<SignForm> {
       setState(() {
         errors.remove(error);
       });
+    }
+  }
+
+  void handleLogin({required username, required password}) async {
+    List<User> user = [];
+    await API.getUser(username).then((value) {
+      setState(() {
+        user = value;
+      });
+    });
+
+    if (user.isNotEmpty) {
+      if (user[0].email == username && user[0].password == password) {
+        Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+      } else {
+        showDialog(
+            context: context,
+            builder: (ctx) => const AlertDialog(
+                  title: Text("Login failed"),
+                  content: Text("Username or password is incorrect"),
+                ));
+      }
+    } else {
+      showDialog(
+          context: context,
+          builder: (ctx) => const AlertDialog(
+                title: Text("Login failed"),
+                content: Text("Username is incorrect"),
+              ));
     }
   }
 
@@ -86,7 +117,7 @@ class _SignFormState extends State<SignForm> {
               press: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  Navigator.pushNamed(context, LoginSuccessScreen.routeName);
+                  handleLogin(username: email, password: password);
                 }
               })
         ],
@@ -107,10 +138,10 @@ class _SignFormState extends State<SignForm> {
         return;
       },
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(kPassNullError)) {
+        if (value!.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if (value.length < 8 && !errors.contains(kShortPassError)) {
+        } else if (value.length < 8) {
           addError(error: kShortPassError);
           return "";
         }
@@ -141,11 +172,10 @@ class _SignFormState extends State<SignForm> {
         return;
       },
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(kEmailNullError)) {
+        if (value!.isEmpty) {
           addError(error: kEmailNullError);
           return "";
-        } else if (!emailValidatorRegExp.hasMatch(value) &&
-            !errors.contains(kInvalidEmailError)) {
+        } else if (!emailValidatorRegExp.hasMatch(value)) {
           addError(error: kInvalidEmailError);
           return "";
         }

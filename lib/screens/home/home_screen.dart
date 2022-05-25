@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../components/custom_button_nav_bar.dart';
 import '../../enums.dart';
 import 'components/body.dart';
