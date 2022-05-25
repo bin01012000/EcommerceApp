@@ -1,20 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fruit_app/api/api.dart';
+import 'package:fruit_app/models/Categories.dart';
 import '../../../size_config.dart';
 
-class Categories extends StatelessWidget {
+class Categories extends StatefulWidget {
   const Categories({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    List<Map<String, dynamic>> categories = [
-      {"icon": "assets/icons/Flash Icon.svg", "text": "Flash Deal"},
-      {"icon": "assets/icons/Bill Icon.svg", "text": "Bill"},
-      {"icon": "assets/icons/Game Icon.svg", "text": "Game"},
-      {"icon": "assets/icons/Gift Icon.svg", "text": "Daily Gift"},
-      {"icon": "assets/icons/Discover.svg", "text": "More"},
-    ];
+  State<Categories> createState() => _CategoriesState();
+}
 
+class _CategoriesState extends State<Categories> {
+  List<CategoryModel> cate = [];
+
+  callApi() async {
+    await API.getCategory().then((value) {
+      setState(() {
+        cate = value;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    print(cate);
+    callApi();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
@@ -23,12 +39,17 @@ class Categories extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           ...List.generate(
-            categories.length,
+            cate.length,
             (index) => CategoryCard(
-              icon: categories[index]['icon'],
-              text: categories[index]['text'],
+              icon: cate[index].image.toString(),
+              text: cate[index].nameCate.toString(),
               press: () {},
             ),
+          ),
+          CategoryCard(
+            icon: "assets/icons/Discover.svg",
+            text: "More",
+            press: () {},
           ),
         ],
       ),

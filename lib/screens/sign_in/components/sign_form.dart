@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_session/flutter_session.dart';
 import 'package:fruit_app/api/api.dart';
 import 'package:fruit_app/components/custom_suffix_icon.dart';
 import 'package:fruit_app/components/default_button.dart';
@@ -48,6 +49,7 @@ class _SignFormState extends State<SignForm> {
 
     if (user.isNotEmpty) {
       if (user[0].email == username && user[0].password == password) {
+        await FlutterSession().set("login", username);
         Navigator.pushNamed(context, LoginSuccessScreen.routeName);
       } else {
         showDialog(

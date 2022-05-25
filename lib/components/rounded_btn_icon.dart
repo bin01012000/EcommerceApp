@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fruit_app/models/ProductModel.dart';
 
 import '../models/Product.dart';
 import '../size_config.dart';
@@ -30,6 +31,6 @@ class RoundedIconBtn extends StatelessWidget {
 }
 
 class ProductDetailsArgument {
-  final Product product;
+  final ProductModel product;
   ProductDetailsArgument(this.product);
 }

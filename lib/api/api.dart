@@ -1,17 +1,32 @@
 import 'dart:convert';
 import 'package:fruit_app/models/Categories.dart';
+import 'package:fruit_app/models/Fav.dart';
+import 'package:fruit_app/models/ProductModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
 import '../models/User.dart';
 
 class API {
-  static const String url = "http://192.168.100.7:5000";
-  static List<Categories> parseCate(String res) {
+  static const String url = "https://ecom-dier.herokuapp.com";
+  static List<CategoryModel> parseCate(String res) {
     var list = json.decode(res) as List<dynamic>;
-    List<Categories> dataCate =
-        list.map((e) => Categories.fromJson(e)).toList();
+    List<CategoryModel> dataCate =
+        list.map((e) => CategoryModel.fromJson(e)).toList();
     return dataCate;
+  }
+
+  static List<ProductModel> parseProduct(String res) {
+    var list = json.decode(res) as List<dynamic>;
+    List<ProductModel> dataPro =
+        list.map((e) => ProductModel.fromJson(e)).toList();
+    return dataPro;
+  }
+
+  static List<Fav> parseFav(String res) {
+    var list = json.decode(res) as List<dynamic>;
+    List<Fav> dataPro = list.map((e) => Fav.fromJson(e)).toList();
+    return dataPro;
   }
 
   static List<User> parseUser(String res) {
@@ -20,11 +35,32 @@ class API {
     return dataUser;
   }
 
-  static Future<List<Categories>> getCategory() async {
-    final res = await http.get(Uri.parse("$url/allcategory"));
+  static Future<List<ProductModel>> getFav(String u) async {
+    final res = await http.get(Uri.parse("$url/getfav?email=$u"));
     if (res.statusCode == 200) {
-      print(res.body);
+      return compute(parseProduct, res.body);
+    } else if (res.statusCode == 404) {
+      throw Exception('Not found');
+    } else {
+      throw Exception('Can\'t get cate');
+    }
+  }
+
+  static Future<List<CategoryModel>> getCategory() async {
+    final res = await http.get(Uri.parse("$url/fourcate"));
+    if (res.statusCode == 200) {
       return compute(parseCate, res.body);
+    } else if (res.statusCode == 404) {
+      throw Exception('Not found');
+    } else {
+      throw Exception('Can\'t get cate');
+    }
+  }
+
+  static Future<List<ProductModel>> getProduct() async {
+    final res = await http.get(Uri.parse("$url/fourproduct"));
+    if (res.statusCode == 200) {
+      return compute(parseProduct, res.body);
     } else if (res.statusCode == 404) {
       throw Exception('Not found');
     } else {

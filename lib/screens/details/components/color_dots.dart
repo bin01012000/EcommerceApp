@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fruit_app/models/ProductModel.dart';
 
 import '../../../components/rounded_btn_icon.dart';
-import '../../../models/Product.dart';
 import '../../../size_config.dart';
 import 'color_dot.dart';
 
@@ -11,7 +11,7 @@ class ColorDots extends StatefulWidget {
     required this.product,
   }) : super(key: key);
 
-  final Product product;
+  final ProductModel product;
 
   @override
   State<ColorDots> createState() => _ColorDotsState();
@@ -28,18 +28,11 @@ class _ColorDotsState extends State<ColorDots> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          ...List.generate(
-            widget.product.colors.length,
-            (index) => GestureDetector(
-              onTap: () {
-                setState(() {
-                  selected = index;
-                });
-              },
-              child: ColorDot(
-                color: widget.product.colors[index],
-                isSelected: selected == index,
-              ),
+          GestureDetector(
+            onTap: () {},
+            child: const ColorDot(
+              color: Color(0xffffffff),
+              isSelected: true,
             ),
           ),
           const Spacer(),

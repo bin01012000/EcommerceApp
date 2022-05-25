@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fruit_app/components/default_button.dart';
+import 'package:fruit_app/models/ProductModel.dart';
 import 'package:fruit_app/screens/details/components/product_description.dart';
 import 'package:fruit_app/screens/details/components/product_images.dart';
 import 'package:fruit_app/screens/details/components/top_rounded_container.dart';
@@ -8,7 +9,7 @@ import '../../../models/Product.dart';
 import 'color_dots.dart';
 
 class Body extends StatelessWidget {
-  final Product product;
+  final ProductModel product;
   const Body({Key? key, required this.product}) : super(key: key);
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fruit_app/screens/favorite/favorite_screen.dart';
 
 import '../constants.dart';
 import '../enums.dart';
@@ -47,7 +48,9 @@ class CustomBottomNavBar extends StatelessWidget {
                       : inActiveIconColor),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, FavoriteScreen.routeName);
+              },
               icon: SvgPicture.asset("assets/icons/Heart Icon.svg",
                   color: MenuState.favourite == selectedMenu
                       ? kPrimaryColor

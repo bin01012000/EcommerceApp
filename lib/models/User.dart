@@ -33,18 +33,18 @@ class User {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['username'] = this.username;
-    data['password'] = this.password;
-    data['email'] = this.email;
-    data['address'] = this.address;
-    data['firstname'] = this.firstname;
-    data['lastname'] = this.lastname;
-    data['phone'] = this.phone;
+    data['username'] = username;
+    data['password'] = password;
+    data['email'] = email;
+    data['address'] = address;
+    data['firstname'] = firstname;
+    data['lastname'] = lastname;
+    data['phone'] = phone;
     return data;
   }
 
   @override
   String toString() {
-    return "user:${username}password: ${password!}";
+    return "user:${username!}password: ${password!}";
   }
 }

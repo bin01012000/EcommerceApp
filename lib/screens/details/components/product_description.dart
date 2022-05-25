@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fruit_app/models/ProductModel.dart';
 
 import '../../../constants.dart';
 import '../../../models/Product.dart';
@@ -12,7 +13,7 @@ class ProductDescription extends StatelessWidget {
     required this.pressOnSeeMore,
   }) : super(key: key);
 
-  final Product product;
+  final ProductModel product;
   final GestureTapCallback pressOnSeeMore;
 
   @override
@@ -24,7 +25,7 @@ class ProductDescription extends StatelessWidget {
           padding:
               EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
           child: Text(
-            product.title,
+            product.name.toString(),
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -37,9 +38,7 @@ class ProductDescription extends StatelessWidget {
             padding: EdgeInsets.all(getProportionateScreenWidth(15)),
             width: getProportionateScreenWidth(64),
             decoration: BoxDecoration(
-              color: product.isFavourite
-                  ? const Color(0xffffe6e6)
-                  : const Color(0xfff5f6f9),
+              color: true ? const Color(0xffffe6e6) : const Color(0xfff5f6f9),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 bottomLeft: Radius.circular(20),
@@ -47,9 +46,7 @@ class ProductDescription extends StatelessWidget {
             ),
             child: SvgPicture.asset(
               "assets/icons/Heart Icon_2.svg",
-              color: product.isFavourite
-                  ? const Color(0xffff4848)
-                  : const Color(0xffd8def4),
+              color: true ? const Color(0xffff4848) : const Color(0xffd8def4),
             ),
           ),
         ),
@@ -61,7 +58,7 @@ class ProductDescription extends StatelessWidget {
               left: getProportionateScreenWidth(20),
               right: getProportionateScreenWidth(64)),
           child: Text(
-            product.description,
+            product.detail.toString(),
             maxLines: 3,
           ),
         ),

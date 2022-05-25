@@ -1,14 +1,20 @@
-class Categories {
-  int? idCate;
-  String? nameCate;
-  int? amount;
+class CategoryModel {
+  late int? idCate;
+  late String? nameCate;
+  late int? amount;
+  late String? image;
 
-  Categories({this.idCate, this.nameCate, this.amount});
+  CategoryModel(
+      {required this.idCate,
+      required this.nameCate,
+      required this.amount,
+      required this.image});
 
-  Categories.fromJson(Map<String, dynamic> json) {
+  CategoryModel.fromJson(Map<String, dynamic> json) {
     idCate = json['idCate'];
     nameCate = json['nameCate'];
     amount = json['amount'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -16,11 +22,7 @@ class Categories {
     data['idCate'] = this.idCate;
     data['nameCate'] = this.nameCate;
     data['amount'] = this.amount;
+    data['image'] = this.image;
     return data;
-  }
-
-  @override
-  String toString() {
-    return '{idCate: $idCate, nameCate: $nameCate}';
   }
 }

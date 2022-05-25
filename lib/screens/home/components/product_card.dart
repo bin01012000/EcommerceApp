@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fruit_app/models/ProductModel.dart';
 import '../../../constants.dart';
-import '../../../models/Product.dart';
 import '../../../size_config.dart';
 
 class ProductCard extends StatelessWidget {
@@ -9,12 +9,12 @@ class ProductCard extends StatelessWidget {
     Key? key,
     this.width = 140,
     this.aspectRetion = 1.02,
-    required this.product,
     required this.press,
+    required this.product,
   }) : super(key: key);
 
   final double width, aspectRetion;
-  final Product product;
+  final ProductModel product;
   final GestureTapCallback press;
 
   @override
@@ -35,12 +35,12 @@ class ProductCard extends StatelessWidget {
                     color: kSecondaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Image.asset(product.images[0]),
+                  child: Image.asset(product.img.toString()),
                 ),
               ),
               const SizedBox(height: 5),
               Text(
-                product.title,
+                product.name.toString(),
                 style: const TextStyle(color: Colors.black),
                 maxLines: 2,
               ),
@@ -63,14 +63,14 @@ class ProductCard extends StatelessWidget {
                       width: getProportionateScreenWidth(28),
                       height: getProportionateScreenWidth(28),
                       decoration: BoxDecoration(
-                        color: product.isFavourite
+                        color: true
                             ? kPrimaryColor.withOpacity(0.15)
                             : kSecondaryColor.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       child: SvgPicture.asset(
                         "assets/icons/Heart Icon_2.svg",
-                        color: product.isFavourite
+                        color: true
                             ? const Color(0xffff4848)
                             : const Color(0xffdbdee4),
                       ),
